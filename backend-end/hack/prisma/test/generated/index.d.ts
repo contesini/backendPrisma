@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  petition: (where?: PetitionWhereInput) => Promise<boolean>;
   resetPassword: (where?: ResetPasswordWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -39,6 +40,25 @@ export interface Prisma {
    * Queries
    */
 
+  petition: (where: PetitionWhereUniqueInput) => PetitionNullablePromise;
+  petitions: (args?: {
+    where?: PetitionWhereInput;
+    orderBy?: PetitionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Petition>;
+  petitionsConnection: (args?: {
+    where?: PetitionWhereInput;
+    orderBy?: PetitionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => PetitionConnectionPromise;
   resetPassword: (
     where: ResetPasswordWhereUniqueInput
   ) => ResetPasswordNullablePromise;
@@ -85,6 +105,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createPetition: (data: PetitionCreateInput) => PetitionPromise;
+  updatePetition: (args: {
+    data: PetitionUpdateInput;
+    where: PetitionWhereUniqueInput;
+  }) => PetitionPromise;
+  updateManyPetitions: (args: {
+    data: PetitionUpdateManyMutationInput;
+    where?: PetitionWhereInput;
+  }) => BatchPayloadPromise;
+  upsertPetition: (args: {
+    where: PetitionWhereUniqueInput;
+    create: PetitionCreateInput;
+    update: PetitionUpdateInput;
+  }) => PetitionPromise;
+  deletePetition: (where: PetitionWhereUniqueInput) => PetitionPromise;
+  deleteManyPetitions: (where?: PetitionWhereInput) => BatchPayloadPromise;
   createResetPassword: (data: ResetPasswordCreateInput) => ResetPasswordPromise;
   updateResetPassword: (args: {
     data: ResetPasswordUpdateInput;
@@ -130,6 +166,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  petition: (
+    where?: PetitionSubscriptionWhereInput
+  ) => PetitionSubscriptionPayloadSubscription;
   resetPassword: (
     where?: ResetPasswordSubscriptionWhereInput
   ) => ResetPasswordSubscriptionPayloadSubscription;
@@ -146,6 +185,18 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type PetitionOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type UserStatus = "VALIDATED" | "PENDING" | "INVALIDATE";
+
 export type ResetPasswordOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -157,8 +208,34 @@ export type UserOrderByInput =
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "surname_ASC"
+  | "surname_DESC"
+  | "cpf_ASC"
+  | "cpf_DESC"
+  | "rg_ASC"
+  | "rg_DESC"
+  | "numeroCarteiraDeTrabalho_ASC"
+  | "numeroCarteiraDeTrabalho_DESC"
+  | "pis_ASC"
+  | "pis_DESC"
+  | "streetAddress_ASC"
+  | "streetAddress_DESC"
+  | "addressNumber_ASC"
+  | "addressNumber_DESC"
+  | "complement_ASC"
+  | "complement_DESC"
+  | "neighborhood_ASC"
+  | "neighborhood_DESC"
+  | "city_ASC"
+  | "city_DESC"
+  | "state_ASC"
+  | "state_DESC"
   | "email_ASC"
   | "email_DESC"
+  | "documentPhoto_ASC"
+  | "documentPhoto_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "password_ASC"
   | "password_DESC"
   | "phone_ASC"
@@ -170,194 +247,17 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserUpdateOneRequiredWithoutResetsPasswordInput {
-  create?: Maybe<UserCreateWithoutResetsPasswordInput>;
-  update?: Maybe<UserUpdateWithoutResetsPasswordDataInput>;
-  upsert?: Maybe<UserUpsertWithoutResetsPasswordInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface ResetPasswordUpdateWithoutUserDataInput {
+  isExpired?: Maybe<Boolean>;
 }
 
-export type ResetPasswordWhereUniqueInput = AtLeastOne<{
+export type PetitionWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface UserUpsertWithoutResetsPasswordInput {
-  update: UserUpdateWithoutResetsPasswordDataInput;
-  create: UserCreateWithoutResetsPasswordInput;
-}
-
-export interface ResetPasswordWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  user?: Maybe<UserWhereInput>;
-  isExpired?: Maybe<Boolean>;
-  isExpired_not?: Maybe<Boolean>;
-  AND?: Maybe<ResetPasswordWhereInput[] | ResetPasswordWhereInput>;
-  OR?: Maybe<ResetPasswordWhereInput[] | ResetPasswordWhereInput>;
-  NOT?: Maybe<ResetPasswordWhereInput[] | ResetPasswordWhereInput>;
-}
-
-export interface ResetPasswordUpdateManyWithoutUserInput {
-  create?: Maybe<
-    ResetPasswordCreateWithoutUserInput[] | ResetPasswordCreateWithoutUserInput
-  >;
-  delete?: Maybe<
-    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
-  >;
-  connect?: Maybe<
-    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
-  >;
-  set?: Maybe<ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput>;
-  disconnect?: Maybe<
-    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
-  >;
-  update?: Maybe<
-    | ResetPasswordUpdateWithWhereUniqueWithoutUserInput[]
-    | ResetPasswordUpdateWithWhereUniqueWithoutUserInput
-  >;
-  upsert?: Maybe<
-    | ResetPasswordUpsertWithWhereUniqueWithoutUserInput[]
-    | ResetPasswordUpsertWithWhereUniqueWithoutUserInput
-  >;
-  deleteMany?: Maybe<
-    ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput
-  >;
-  updateMany?: Maybe<
-    | ResetPasswordUpdateManyWithWhereNestedInput[]
-    | ResetPasswordUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  email: String;
-  password: String;
-  phone?: Maybe<String>;
-  resetsPassword?: Maybe<ResetPasswordCreateManyWithoutUserInput>;
-}
-
-export interface ResetPasswordUpdateManyMutationInput {
-  isExpired?: Maybe<Boolean>;
-}
-
-export interface ResetPasswordSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ResetPasswordWhereInput>;
-  AND?: Maybe<
-    ResetPasswordSubscriptionWhereInput[] | ResetPasswordSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    ResetPasswordSubscriptionWhereInput[] | ResetPasswordSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    ResetPasswordSubscriptionWhereInput[] | ResetPasswordSubscriptionWhereInput
-  >;
-}
-
-export interface ResetPasswordCreateInput {
-  id?: Maybe<ID_Input>;
-  user: UserCreateOneWithoutResetsPasswordInput;
-  isExpired: Boolean;
-}
-
-export interface ResetPasswordUpdateManyDataInput {
-  isExpired?: Maybe<Boolean>;
-}
-
-export interface UserCreateOneWithoutResetsPasswordInput {
-  create?: Maybe<UserCreateWithoutResetsPasswordInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface ResetPasswordScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  isExpired?: Maybe<Boolean>;
-  isExpired_not?: Maybe<Boolean>;
-  AND?: Maybe<ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput>;
-  OR?: Maybe<ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput>;
-  NOT?: Maybe<ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput>;
-}
-
-export interface UserCreateWithoutResetsPasswordInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  email: String;
-  password: String;
-  phone?: Maybe<String>;
-}
-
-export interface ResetPasswordUpsertWithWhereUniqueWithoutUserInput {
-  where: ResetPasswordWhereUniqueInput;
-  update: ResetPasswordUpdateWithoutUserDataInput;
-  create: ResetPasswordCreateWithoutUserInput;
-}
-
-export interface ResetPasswordUpdateInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutResetsPasswordInput>;
-  isExpired?: Maybe<Boolean>;
-}
-
-export interface ResetPasswordUpdateWithWhereUniqueWithoutUserInput {
-  where: ResetPasswordWhereUniqueInput;
-  data: ResetPasswordUpdateWithoutUserDataInput;
-}
-
-export interface UserUpdateInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  phone?: Maybe<String>;
-  resetsPassword?: Maybe<ResetPasswordUpdateManyWithoutUserInput>;
-}
-
-export interface UserUpdateManyMutationInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  phone?: Maybe<String>;
-}
-
-export interface ResetPasswordCreateManyWithoutUserInput {
-  create?: Maybe<
-    ResetPasswordCreateWithoutUserInput[] | ResetPasswordCreateWithoutUserInput
-  >;
-  connect?: Maybe<
-    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
-  >;
-}
-
-export interface ResetPasswordCreateWithoutUserInput {
-  id?: Maybe<ID_Input>;
-  isExpired: Boolean;
+export interface ResetPasswordUpdateManyWithWhereNestedInput {
+  where: ResetPasswordScalarWhereInput;
+  data: ResetPasswordUpdateManyDataInput;
 }
 
 export interface UserWhereInput {
@@ -389,6 +289,160 @@ export interface UserWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  surname?: Maybe<String>;
+  surname_not?: Maybe<String>;
+  surname_in?: Maybe<String[] | String>;
+  surname_not_in?: Maybe<String[] | String>;
+  surname_lt?: Maybe<String>;
+  surname_lte?: Maybe<String>;
+  surname_gt?: Maybe<String>;
+  surname_gte?: Maybe<String>;
+  surname_contains?: Maybe<String>;
+  surname_not_contains?: Maybe<String>;
+  surname_starts_with?: Maybe<String>;
+  surname_not_starts_with?: Maybe<String>;
+  surname_ends_with?: Maybe<String>;
+  surname_not_ends_with?: Maybe<String>;
+  cpf?: Maybe<String>;
+  cpf_not?: Maybe<String>;
+  cpf_in?: Maybe<String[] | String>;
+  cpf_not_in?: Maybe<String[] | String>;
+  cpf_lt?: Maybe<String>;
+  cpf_lte?: Maybe<String>;
+  cpf_gt?: Maybe<String>;
+  cpf_gte?: Maybe<String>;
+  cpf_contains?: Maybe<String>;
+  cpf_not_contains?: Maybe<String>;
+  cpf_starts_with?: Maybe<String>;
+  cpf_not_starts_with?: Maybe<String>;
+  cpf_ends_with?: Maybe<String>;
+  cpf_not_ends_with?: Maybe<String>;
+  rg?: Maybe<String>;
+  rg_not?: Maybe<String>;
+  rg_in?: Maybe<String[] | String>;
+  rg_not_in?: Maybe<String[] | String>;
+  rg_lt?: Maybe<String>;
+  rg_lte?: Maybe<String>;
+  rg_gt?: Maybe<String>;
+  rg_gte?: Maybe<String>;
+  rg_contains?: Maybe<String>;
+  rg_not_contains?: Maybe<String>;
+  rg_starts_with?: Maybe<String>;
+  rg_not_starts_with?: Maybe<String>;
+  rg_ends_with?: Maybe<String>;
+  rg_not_ends_with?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  numeroCarteiraDeTrabalho_not?: Maybe<String>;
+  numeroCarteiraDeTrabalho_in?: Maybe<String[] | String>;
+  numeroCarteiraDeTrabalho_not_in?: Maybe<String[] | String>;
+  numeroCarteiraDeTrabalho_lt?: Maybe<String>;
+  numeroCarteiraDeTrabalho_lte?: Maybe<String>;
+  numeroCarteiraDeTrabalho_gt?: Maybe<String>;
+  numeroCarteiraDeTrabalho_gte?: Maybe<String>;
+  numeroCarteiraDeTrabalho_contains?: Maybe<String>;
+  numeroCarteiraDeTrabalho_not_contains?: Maybe<String>;
+  numeroCarteiraDeTrabalho_starts_with?: Maybe<String>;
+  numeroCarteiraDeTrabalho_not_starts_with?: Maybe<String>;
+  numeroCarteiraDeTrabalho_ends_with?: Maybe<String>;
+  numeroCarteiraDeTrabalho_not_ends_with?: Maybe<String>;
+  pis?: Maybe<String>;
+  pis_not?: Maybe<String>;
+  pis_in?: Maybe<String[] | String>;
+  pis_not_in?: Maybe<String[] | String>;
+  pis_lt?: Maybe<String>;
+  pis_lte?: Maybe<String>;
+  pis_gt?: Maybe<String>;
+  pis_gte?: Maybe<String>;
+  pis_contains?: Maybe<String>;
+  pis_not_contains?: Maybe<String>;
+  pis_starts_with?: Maybe<String>;
+  pis_not_starts_with?: Maybe<String>;
+  pis_ends_with?: Maybe<String>;
+  pis_not_ends_with?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  streetAddress_not?: Maybe<String>;
+  streetAddress_in?: Maybe<String[] | String>;
+  streetAddress_not_in?: Maybe<String[] | String>;
+  streetAddress_lt?: Maybe<String>;
+  streetAddress_lte?: Maybe<String>;
+  streetAddress_gt?: Maybe<String>;
+  streetAddress_gte?: Maybe<String>;
+  streetAddress_contains?: Maybe<String>;
+  streetAddress_not_contains?: Maybe<String>;
+  streetAddress_starts_with?: Maybe<String>;
+  streetAddress_not_starts_with?: Maybe<String>;
+  streetAddress_ends_with?: Maybe<String>;
+  streetAddress_not_ends_with?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  addressNumber_not?: Maybe<String>;
+  addressNumber_in?: Maybe<String[] | String>;
+  addressNumber_not_in?: Maybe<String[] | String>;
+  addressNumber_lt?: Maybe<String>;
+  addressNumber_lte?: Maybe<String>;
+  addressNumber_gt?: Maybe<String>;
+  addressNumber_gte?: Maybe<String>;
+  addressNumber_contains?: Maybe<String>;
+  addressNumber_not_contains?: Maybe<String>;
+  addressNumber_starts_with?: Maybe<String>;
+  addressNumber_not_starts_with?: Maybe<String>;
+  addressNumber_ends_with?: Maybe<String>;
+  addressNumber_not_ends_with?: Maybe<String>;
+  complement?: Maybe<String>;
+  complement_not?: Maybe<String>;
+  complement_in?: Maybe<String[] | String>;
+  complement_not_in?: Maybe<String[] | String>;
+  complement_lt?: Maybe<String>;
+  complement_lte?: Maybe<String>;
+  complement_gt?: Maybe<String>;
+  complement_gte?: Maybe<String>;
+  complement_contains?: Maybe<String>;
+  complement_not_contains?: Maybe<String>;
+  complement_starts_with?: Maybe<String>;
+  complement_not_starts_with?: Maybe<String>;
+  complement_ends_with?: Maybe<String>;
+  complement_not_ends_with?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  neighborhood_not?: Maybe<String>;
+  neighborhood_in?: Maybe<String[] | String>;
+  neighborhood_not_in?: Maybe<String[] | String>;
+  neighborhood_lt?: Maybe<String>;
+  neighborhood_lte?: Maybe<String>;
+  neighborhood_gt?: Maybe<String>;
+  neighborhood_gte?: Maybe<String>;
+  neighborhood_contains?: Maybe<String>;
+  neighborhood_not_contains?: Maybe<String>;
+  neighborhood_starts_with?: Maybe<String>;
+  neighborhood_not_starts_with?: Maybe<String>;
+  neighborhood_ends_with?: Maybe<String>;
+  neighborhood_not_ends_with?: Maybe<String>;
+  city?: Maybe<String>;
+  city_not?: Maybe<String>;
+  city_in?: Maybe<String[] | String>;
+  city_not_in?: Maybe<String[] | String>;
+  city_lt?: Maybe<String>;
+  city_lte?: Maybe<String>;
+  city_gt?: Maybe<String>;
+  city_gte?: Maybe<String>;
+  city_contains?: Maybe<String>;
+  city_not_contains?: Maybe<String>;
+  city_starts_with?: Maybe<String>;
+  city_not_starts_with?: Maybe<String>;
+  city_ends_with?: Maybe<String>;
+  city_not_ends_with?: Maybe<String>;
+  state?: Maybe<String>;
+  state_not?: Maybe<String>;
+  state_in?: Maybe<String[] | String>;
+  state_not_in?: Maybe<String[] | String>;
+  state_lt?: Maybe<String>;
+  state_lte?: Maybe<String>;
+  state_gt?: Maybe<String>;
+  state_gte?: Maybe<String>;
+  state_contains?: Maybe<String>;
+  state_not_contains?: Maybe<String>;
+  state_starts_with?: Maybe<String>;
+  state_not_starts_with?: Maybe<String>;
+  state_ends_with?: Maybe<String>;
+  state_not_ends_with?: Maybe<String>;
   email?: Maybe<String>;
   email_not?: Maybe<String>;
   email_in?: Maybe<String[] | String>;
@@ -403,6 +457,27 @@ export interface UserWhereInput {
   email_not_starts_with?: Maybe<String>;
   email_ends_with?: Maybe<String>;
   email_not_ends_with?: Maybe<String>;
+  documentPhoto?: Maybe<String>;
+  documentPhoto_not?: Maybe<String>;
+  documentPhoto_in?: Maybe<String[] | String>;
+  documentPhoto_not_in?: Maybe<String[] | String>;
+  documentPhoto_lt?: Maybe<String>;
+  documentPhoto_lte?: Maybe<String>;
+  documentPhoto_gt?: Maybe<String>;
+  documentPhoto_gte?: Maybe<String>;
+  documentPhoto_contains?: Maybe<String>;
+  documentPhoto_not_contains?: Maybe<String>;
+  documentPhoto_starts_with?: Maybe<String>;
+  documentPhoto_not_starts_with?: Maybe<String>;
+  documentPhoto_ends_with?: Maybe<String>;
+  documentPhoto_not_ends_with?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  status_not?: Maybe<UserStatus>;
+  status_in?: Maybe<UserStatus[] | UserStatus>;
+  status_not_in?: Maybe<UserStatus[] | UserStatus>;
+  petitions_every?: Maybe<PetitionWhereInput>;
+  petitions_some?: Maybe<PetitionWhereInput>;
+  petitions_none?: Maybe<PetitionWhereInput>;
   password?: Maybe<String>;
   password_not?: Maybe<String>;
   password_in?: Maybe<String[] | String>;
@@ -455,16 +530,32 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export interface UserUpdateWithoutResetsPasswordDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  phone?: Maybe<String>;
+export interface ResetPasswordCreateManyWithoutUserInput {
+  create?: Maybe<
+    ResetPasswordCreateWithoutUserInput[] | ResetPasswordCreateWithoutUserInput
+  >;
+  connect?: Maybe<
+    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
+  >;
 }
 
-export interface ResetPasswordUpdateManyWithWhereNestedInput {
-  where: ResetPasswordScalarWhereInput;
-  data: ResetPasswordUpdateManyDataInput;
+export interface PetitionCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  questions?: Maybe<PetitionCreatequestionsInput>;
+}
+
+export interface ResetPasswordCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  isExpired: Boolean;
+}
+
+export interface ResetPasswordUpdateManyDataInput {
+  isExpired?: Maybe<Boolean>;
+}
+
+export interface PetitionCreatequestionsInput {
+  set?: Maybe<String[] | String>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -478,14 +569,512 @@ export interface UserSubscriptionWhereInput {
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
-export interface ResetPasswordUpdateWithoutUserDataInput {
+export interface PetitionUpdateInput {
+  title?: Maybe<String>;
+  user?: Maybe<UserUpdateOneRequiredWithoutPetitionsInput>;
+  questions?: Maybe<PetitionUpdatequestionsInput>;
+}
+
+export interface PetitionSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<PetitionWhereInput>;
+  AND?: Maybe<
+    PetitionSubscriptionWhereInput[] | PetitionSubscriptionWhereInput
+  >;
+  OR?: Maybe<PetitionSubscriptionWhereInput[] | PetitionSubscriptionWhereInput>;
+  NOT?: Maybe<
+    PetitionSubscriptionWhereInput[] | PetitionSubscriptionWhereInput
+  >;
+}
+
+export interface UserUpdateOneRequiredWithoutPetitionsInput {
+  create?: Maybe<UserCreateWithoutPetitionsInput>;
+  update?: Maybe<UserUpdateWithoutPetitionsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutPetitionsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateInput {
+  name?: Maybe<String>;
+  surname?: Maybe<String>;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email?: Maybe<String>;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  petitions?: Maybe<PetitionUpdateManyWithoutUserInput>;
+  password?: Maybe<String>;
+  phone?: Maybe<String>;
+  resetsPassword?: Maybe<ResetPasswordUpdateManyWithoutUserInput>;
+}
+
+export interface UserUpdateWithoutPetitionsDataInput {
+  name?: Maybe<String>;
+  surname?: Maybe<String>;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email?: Maybe<String>;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  password?: Maybe<String>;
+  phone?: Maybe<String>;
+  resetsPassword?: Maybe<ResetPasswordUpdateManyWithoutUserInput>;
+}
+
+export interface ResetPasswordUpdateManyMutationInput {
   isExpired?: Maybe<Boolean>;
+}
+
+export interface ResetPasswordUpdateManyWithoutUserInput {
+  create?: Maybe<
+    ResetPasswordCreateWithoutUserInput[] | ResetPasswordCreateWithoutUserInput
+  >;
+  delete?: Maybe<
+    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
+  >;
+  connect?: Maybe<
+    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
+  >;
+  set?: Maybe<ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput>;
+  disconnect?: Maybe<
+    ResetPasswordWhereUniqueInput[] | ResetPasswordWhereUniqueInput
+  >;
+  update?: Maybe<
+    | ResetPasswordUpdateWithWhereUniqueWithoutUserInput[]
+    | ResetPasswordUpdateWithWhereUniqueWithoutUserInput
+  >;
+  upsert?: Maybe<
+    | ResetPasswordUpsertWithWhereUniqueWithoutUserInput[]
+    | ResetPasswordUpsertWithWhereUniqueWithoutUserInput
+  >;
+  deleteMany?: Maybe<
+    ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | ResetPasswordUpdateManyWithWhereNestedInput[]
+    | ResetPasswordUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface UserUpsertWithoutResetsPasswordInput {
+  update: UserUpdateWithoutResetsPasswordDataInput;
+  create: UserCreateWithoutResetsPasswordInput;
+}
+
+export interface ResetPasswordUpdateWithWhereUniqueWithoutUserInput {
+  where: ResetPasswordWhereUniqueInput;
+  data: ResetPasswordUpdateWithoutUserDataInput;
+}
+
+export interface PetitionUpdateManyWithWhereNestedInput {
+  where: PetitionScalarWhereInput;
+  data: PetitionUpdateManyDataInput;
+}
+
+export interface PetitionUpdateManyWithoutUserInput {
+  create?: Maybe<
+    PetitionCreateWithoutUserInput[] | PetitionCreateWithoutUserInput
+  >;
+  delete?: Maybe<PetitionWhereUniqueInput[] | PetitionWhereUniqueInput>;
+  connect?: Maybe<PetitionWhereUniqueInput[] | PetitionWhereUniqueInput>;
+  set?: Maybe<PetitionWhereUniqueInput[] | PetitionWhereUniqueInput>;
+  disconnect?: Maybe<PetitionWhereUniqueInput[] | PetitionWhereUniqueInput>;
+  update?: Maybe<
+    | PetitionUpdateWithWhereUniqueWithoutUserInput[]
+    | PetitionUpdateWithWhereUniqueWithoutUserInput
+  >;
+  upsert?: Maybe<
+    | PetitionUpsertWithWhereUniqueWithoutUserInput[]
+    | PetitionUpsertWithWhereUniqueWithoutUserInput
+  >;
+  deleteMany?: Maybe<PetitionScalarWhereInput[] | PetitionScalarWhereInput>;
+  updateMany?: Maybe<
+    | PetitionUpdateManyWithWhereNestedInput[]
+    | PetitionUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PetitionScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<PetitionScalarWhereInput[] | PetitionScalarWhereInput>;
+  OR?: Maybe<PetitionScalarWhereInput[] | PetitionScalarWhereInput>;
+  NOT?: Maybe<PetitionScalarWhereInput[] | PetitionScalarWhereInput>;
+}
+
+export interface ResetPasswordUpsertWithWhereUniqueWithoutUserInput {
+  where: ResetPasswordWhereUniqueInput;
+  update: ResetPasswordUpdateWithoutUserDataInput;
+  create: ResetPasswordCreateWithoutUserInput;
+}
+
+export interface PetitionUpdateWithoutUserDataInput {
+  title?: Maybe<String>;
+  questions?: Maybe<PetitionUpdatequestionsInput>;
+}
+
+export interface ResetPasswordScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  isExpired?: Maybe<Boolean>;
+  isExpired_not?: Maybe<Boolean>;
+  AND?: Maybe<ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput>;
+  OR?: Maybe<ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput>;
+  NOT?: Maybe<ResetPasswordScalarWhereInput[] | ResetPasswordScalarWhereInput>;
+}
+
+export interface UserCreateOneWithoutPetitionsInput {
+  create?: Maybe<UserCreateWithoutPetitionsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface ResetPasswordWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  user?: Maybe<UserWhereInput>;
+  isExpired?: Maybe<Boolean>;
+  isExpired_not?: Maybe<Boolean>;
+  AND?: Maybe<ResetPasswordWhereInput[] | ResetPasswordWhereInput>;
+  OR?: Maybe<ResetPasswordWhereInput[] | ResetPasswordWhereInput>;
+  NOT?: Maybe<ResetPasswordWhereInput[] | ResetPasswordWhereInput>;
+}
+
+export interface PetitionWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  user?: Maybe<UserWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<PetitionWhereInput[] | PetitionWhereInput>;
+  OR?: Maybe<PetitionWhereInput[] | PetitionWhereInput>;
+  NOT?: Maybe<PetitionWhereInput[] | PetitionWhereInput>;
+}
+
+export interface UserUpdateWithoutResetsPasswordDataInput {
+  name?: Maybe<String>;
+  surname?: Maybe<String>;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email?: Maybe<String>;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  petitions?: Maybe<PetitionUpdateManyWithoutUserInput>;
+  password?: Maybe<String>;
+  phone?: Maybe<String>;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: Maybe<String>;
+  surname?: Maybe<String>;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email?: Maybe<String>;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  password?: Maybe<String>;
+  phone?: Maybe<String>;
+}
+
+export interface UserUpsertWithoutPetitionsInput {
+  update: UserUpdateWithoutPetitionsDataInput;
+  create: UserCreateWithoutPetitionsInput;
+}
+
+export type ResetPasswordWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface PetitionUpdatequestionsInput {
+  set?: Maybe<String[] | String>;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
 }>;
+
+export interface PetitionUpdateManyMutationInput {
+  title?: Maybe<String>;
+  questions?: Maybe<PetitionUpdatequestionsInput>;
+}
+
+export interface PetitionUpdateWithWhereUniqueWithoutUserInput {
+  where: PetitionWhereUniqueInput;
+  data: PetitionUpdateWithoutUserDataInput;
+}
+
+export interface UserUpdateOneRequiredWithoutResetsPasswordInput {
+  create?: Maybe<UserCreateWithoutResetsPasswordInput>;
+  update?: Maybe<UserUpdateWithoutResetsPasswordDataInput>;
+  upsert?: Maybe<UserUpsertWithoutResetsPasswordInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutPetitionsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  surname: String;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email: String;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  password: String;
+  phone?: Maybe<String>;
+  resetsPassword?: Maybe<ResetPasswordCreateManyWithoutUserInput>;
+}
+
+export interface ResetPasswordUpdateInput {
+  user?: Maybe<UserUpdateOneRequiredWithoutResetsPasswordInput>;
+  isExpired?: Maybe<Boolean>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  surname: String;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email: String;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  petitions?: Maybe<PetitionCreateManyWithoutUserInput>;
+  password: String;
+  phone?: Maybe<String>;
+  resetsPassword?: Maybe<ResetPasswordCreateManyWithoutUserInput>;
+}
+
+export interface PetitionCreateManyWithoutUserInput {
+  create?: Maybe<
+    PetitionCreateWithoutUserInput[] | PetitionCreateWithoutUserInput
+  >;
+  connect?: Maybe<PetitionWhereUniqueInput[] | PetitionWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutResetsPasswordInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  surname: String;
+  cpf?: Maybe<String>;
+  rg?: Maybe<String>;
+  numeroCarteiraDeTrabalho?: Maybe<String>;
+  pis?: Maybe<String>;
+  streetAddress?: Maybe<String>;
+  addressNumber?: Maybe<String>;
+  complement?: Maybe<String>;
+  neighborhood?: Maybe<String>;
+  city?: Maybe<String>;
+  state?: Maybe<String>;
+  email: String;
+  documentPhoto?: Maybe<String>;
+  status?: Maybe<UserStatus>;
+  petitions?: Maybe<PetitionCreateManyWithoutUserInput>;
+  password: String;
+  phone?: Maybe<String>;
+}
+
+export interface UserCreateOneWithoutResetsPasswordInput {
+  create?: Maybe<UserCreateWithoutResetsPasswordInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface ResetPasswordCreateInput {
+  id?: Maybe<ID_Input>;
+  user: UserCreateOneWithoutResetsPasswordInput;
+  isExpired: Boolean;
+}
+
+export interface PetitionUpdateManyDataInput {
+  title?: Maybe<String>;
+  questions?: Maybe<PetitionUpdatequestionsInput>;
+}
+
+export interface ResetPasswordSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ResetPasswordWhereInput>;
+  AND?: Maybe<
+    ResetPasswordSubscriptionWhereInput[] | ResetPasswordSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    ResetPasswordSubscriptionWhereInput[] | ResetPasswordSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    ResetPasswordSubscriptionWhereInput[] | ResetPasswordSubscriptionWhereInput
+  >;
+}
+
+export interface PetitionCreateInput {
+  id?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  user: UserCreateOneWithoutPetitionsInput;
+  questions?: Maybe<PetitionCreatequestionsInput>;
+}
+
+export interface PetitionUpsertWithWhereUniqueWithoutUserInput {
+  where: PetitionWhereUniqueInput;
+  update: PetitionUpdateWithoutUserDataInput;
+  create: PetitionCreateWithoutUserInput;
+}
 
 export interface NodeNode {
   id: ID_Output;
@@ -494,11 +1083,24 @@ export interface NodeNode {
 export interface UserPreviousValues {
   id: ID_Output;
   name: String;
+  surname: String;
+  cpf?: String;
+  rg?: String;
+  numeroCarteiraDeTrabalho?: String;
+  pis?: String;
+  streetAddress?: String;
+  addressNumber?: String;
+  complement?: String;
+  neighborhood?: String;
+  city?: String;
+  state?: String;
   email: String;
+  documentPhoto?: String;
+  status?: UserStatus;
   password: String;
   phone?: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
+  createdAt?: DateTimeOutput;
+  updatedAt?: DateTimeOutput;
 }
 
 export interface UserPreviousValuesPromise
@@ -506,7 +1108,20 @@ export interface UserPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  surname: () => Promise<String>;
+  cpf: () => Promise<String>;
+  rg: () => Promise<String>;
+  numeroCarteiraDeTrabalho: () => Promise<String>;
+  pis: () => Promise<String>;
+  streetAddress: () => Promise<String>;
+  addressNumber: () => Promise<String>;
+  complement: () => Promise<String>;
+  neighborhood: () => Promise<String>;
+  city: () => Promise<String>;
+  state: () => Promise<String>;
   email: () => Promise<String>;
+  documentPhoto: () => Promise<String>;
+  status: () => Promise<UserStatus>;
   password: () => Promise<String>;
   phone: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -518,27 +1133,96 @@ export interface UserPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  surname: () => Promise<AsyncIterator<String>>;
+  cpf: () => Promise<AsyncIterator<String>>;
+  rg: () => Promise<AsyncIterator<String>>;
+  numeroCarteiraDeTrabalho: () => Promise<AsyncIterator<String>>;
+  pis: () => Promise<AsyncIterator<String>>;
+  streetAddress: () => Promise<AsyncIterator<String>>;
+  addressNumber: () => Promise<AsyncIterator<String>>;
+  complement: () => Promise<AsyncIterator<String>>;
+  neighborhood: () => Promise<AsyncIterator<String>>;
+  city: () => Promise<AsyncIterator<String>>;
+  state: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
+  documentPhoto: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<UserStatus>>;
   password: () => Promise<AsyncIterator<String>>;
   phone: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface ResetPasswordConnection {
+  pageInfo: PageInfo;
+  edges: ResetPasswordEdge[];
+}
+
+export interface ResetPasswordConnectionPromise
+  extends Promise<ResetPasswordConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ResetPasswordEdge>>() => T;
+  aggregate: <T = AggregateResetPasswordPromise>() => T;
+}
+
+export interface ResetPasswordConnectionSubscription
+  extends Promise<AsyncIterator<ResetPasswordConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ResetPasswordEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateResetPasswordSubscription>() => T;
+}
+
 export interface User {
   id: ID_Output;
   name: String;
+  surname: String;
+  cpf?: String;
+  rg?: String;
+  numeroCarteiraDeTrabalho?: String;
+  pis?: String;
+  streetAddress?: String;
+  addressNumber?: String;
+  complement?: String;
+  neighborhood?: String;
+  city?: String;
+  state?: String;
   email: String;
+  documentPhoto?: String;
+  status?: UserStatus;
   password: String;
   phone?: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
+  createdAt?: DateTimeOutput;
+  updatedAt?: DateTimeOutput;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  surname: () => Promise<String>;
+  cpf: () => Promise<String>;
+  rg: () => Promise<String>;
+  numeroCarteiraDeTrabalho: () => Promise<String>;
+  pis: () => Promise<String>;
+  streetAddress: () => Promise<String>;
+  addressNumber: () => Promise<String>;
+  complement: () => Promise<String>;
+  neighborhood: () => Promise<String>;
+  city: () => Promise<String>;
+  state: () => Promise<String>;
   email: () => Promise<String>;
+  documentPhoto: () => Promise<String>;
+  status: () => Promise<UserStatus>;
+  petitions: <T = FragmentableArray<Petition>>(args?: {
+    where?: PetitionWhereInput;
+    orderBy?: PetitionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   password: () => Promise<String>;
   phone: () => Promise<String>;
   resetsPassword: <T = FragmentableArray<ResetPassword>>(args?: {
@@ -559,7 +1243,29 @@ export interface UserSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  surname: () => Promise<AsyncIterator<String>>;
+  cpf: () => Promise<AsyncIterator<String>>;
+  rg: () => Promise<AsyncIterator<String>>;
+  numeroCarteiraDeTrabalho: () => Promise<AsyncIterator<String>>;
+  pis: () => Promise<AsyncIterator<String>>;
+  streetAddress: () => Promise<AsyncIterator<String>>;
+  addressNumber: () => Promise<AsyncIterator<String>>;
+  complement: () => Promise<AsyncIterator<String>>;
+  neighborhood: () => Promise<AsyncIterator<String>>;
+  city: () => Promise<AsyncIterator<String>>;
+  state: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
+  documentPhoto: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<UserStatus>>;
+  petitions: <T = Promise<AsyncIterator<PetitionSubscription>>>(args?: {
+    where?: PetitionWhereInput;
+    orderBy?: PetitionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   password: () => Promise<AsyncIterator<String>>;
   phone: () => Promise<AsyncIterator<String>>;
   resetsPassword: <
@@ -582,7 +1288,29 @@ export interface UserNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  surname: () => Promise<String>;
+  cpf: () => Promise<String>;
+  rg: () => Promise<String>;
+  numeroCarteiraDeTrabalho: () => Promise<String>;
+  pis: () => Promise<String>;
+  streetAddress: () => Promise<String>;
+  addressNumber: () => Promise<String>;
+  complement: () => Promise<String>;
+  neighborhood: () => Promise<String>;
+  city: () => Promise<String>;
+  state: () => Promise<String>;
   email: () => Promise<String>;
+  documentPhoto: () => Promise<String>;
+  status: () => Promise<UserStatus>;
+  petitions: <T = FragmentableArray<Petition>>(args?: {
+    where?: PetitionWhereInput;
+    orderBy?: PetitionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   password: () => Promise<String>;
   phone: () => Promise<String>;
   resetsPassword: <T = FragmentableArray<ResetPassword>>(args?: {
@@ -594,6 +1322,273 @@ export interface UserNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface AggregatePetition {
+  count: Int;
+}
+
+export interface AggregatePetitionPromise
+  extends Promise<AggregatePetition>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePetitionSubscription
+  extends Promise<AsyncIterator<AggregatePetition>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PetitionEdge {
+  node: Petition;
+  cursor: String;
+}
+
+export interface PetitionEdgePromise
+  extends Promise<PetitionEdge>,
+    Fragmentable {
+  node: <T = PetitionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PetitionEdgeSubscription
+  extends Promise<AsyncIterator<PetitionEdge>>,
+    Fragmentable {
+  node: <T = PetitionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface ResetPasswordPreviousValues {
+  id: ID_Output;
+  isExpired: Boolean;
+}
+
+export interface ResetPasswordPreviousValuesPromise
+  extends Promise<ResetPasswordPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  isExpired: () => Promise<Boolean>;
+}
+
+export interface ResetPasswordPreviousValuesSubscription
+  extends Promise<AsyncIterator<ResetPasswordPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  isExpired: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PetitionConnection {
+  pageInfo: PageInfo;
+  edges: PetitionEdge[];
+}
+
+export interface PetitionConnectionPromise
+  extends Promise<PetitionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PetitionEdge>>() => T;
+  aggregate: <T = AggregatePetitionPromise>() => T;
+}
+
+export interface PetitionConnectionSubscription
+  extends Promise<AsyncIterator<PetitionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PetitionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePetitionSubscription>() => T;
+}
+
+export interface ResetPasswordSubscriptionPayload {
+  mutation: MutationType;
+  node: ResetPassword;
+  updatedFields: String[];
+  previousValues: ResetPasswordPreviousValues;
+}
+
+export interface ResetPasswordSubscriptionPayloadPromise
+  extends Promise<ResetPasswordSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ResetPasswordPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ResetPasswordPreviousValuesPromise>() => T;
+}
+
+export interface ResetPasswordSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ResetPasswordSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ResetPasswordSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ResetPasswordPreviousValuesSubscription>() => T;
+}
+
+export interface ResetPasswordEdge {
+  node: ResetPassword;
+  cursor: String;
+}
+
+export interface ResetPasswordEdgePromise
+  extends Promise<ResetPasswordEdge>,
+    Fragmentable {
+  node: <T = ResetPasswordPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ResetPasswordEdgeSubscription
+  extends Promise<AsyncIterator<ResetPasswordEdge>>,
+    Fragmentable {
+  node: <T = ResetPasswordSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PetitionPreviousValues {
+  id: ID_Output;
+  title?: String;
+  questions: String[];
+  createdAt?: DateTimeOutput;
+  updatedAt?: DateTimeOutput;
+}
+
+export interface PetitionPreviousValuesPromise
+  extends Promise<PetitionPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  questions: () => Promise<String[]>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PetitionPreviousValuesSubscription
+  extends Promise<AsyncIterator<PetitionPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  questions: () => Promise<AsyncIterator<String[]>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface PetitionSubscriptionPayload {
+  mutation: MutationType;
+  node: Petition;
+  updatedFields: String[];
+  previousValues: PetitionPreviousValues;
+}
+
+export interface PetitionSubscriptionPayloadPromise
+  extends Promise<PetitionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PetitionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PetitionPreviousValuesPromise>() => T;
+}
+
+export interface PetitionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PetitionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PetitionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PetitionPreviousValuesSubscription>() => T;
+}
+
+export interface Petition {
+  id: ID_Output;
+  title?: String;
+  questions: String[];
+  createdAt?: DateTimeOutput;
+  updatedAt?: DateTimeOutput;
+}
+
+export interface PetitionPromise extends Promise<Petition>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  user: <T = UserPromise>() => T;
+  questions: () => Promise<String[]>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PetitionSubscription
+  extends Promise<AsyncIterator<Petition>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  user: <T = UserSubscription>() => T;
+  questions: () => Promise<AsyncIterator<String[]>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface PetitionNullablePromise
+  extends Promise<Petition | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  user: <T = UserPromise>() => T;
+  questions: () => Promise<String[]>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -627,161 +1622,6 @@ export interface ResetPasswordNullablePromise
   isExpired: () => Promise<Boolean>;
 }
 
-export interface AggregateResetPassword {
-  count: Int;
-}
-
-export interface AggregateResetPasswordPromise
-  extends Promise<AggregateResetPassword>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateResetPasswordSubscription
-  extends Promise<AsyncIterator<AggregateResetPassword>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ResetPasswordEdge {
-  node: ResetPassword;
-  cursor: String;
-}
-
-export interface ResetPasswordEdgePromise
-  extends Promise<ResetPasswordEdge>,
-    Fragmentable {
-  node: <T = ResetPasswordPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ResetPasswordEdgeSubscription
-  extends Promise<AsyncIterator<ResetPasswordEdge>>,
-    Fragmentable {
-  node: <T = ResetPasswordSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ResetPasswordPreviousValues {
-  id: ID_Output;
-  isExpired: Boolean;
-}
-
-export interface ResetPasswordPreviousValuesPromise
-  extends Promise<ResetPasswordPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  isExpired: () => Promise<Boolean>;
-}
-
-export interface ResetPasswordPreviousValuesSubscription
-  extends Promise<AsyncIterator<ResetPasswordPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  isExpired: () => Promise<AsyncIterator<Boolean>>;
-}
-
-export interface ResetPasswordSubscriptionPayload {
-  mutation: MutationType;
-  node: ResetPassword;
-  updatedFields: String[];
-  previousValues: ResetPasswordPreviousValues;
-}
-
-export interface ResetPasswordSubscriptionPayloadPromise
-  extends Promise<ResetPasswordSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ResetPasswordPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ResetPasswordPreviousValuesPromise>() => T;
-}
-
-export interface ResetPasswordSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ResetPasswordSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ResetPasswordSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ResetPasswordPreviousValuesSubscription>() => T;
-}
-
-export interface ResetPasswordConnection {
-  pageInfo: PageInfo;
-  edges: ResetPasswordEdge[];
-}
-
-export interface ResetPasswordConnectionPromise
-  extends Promise<ResetPasswordConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ResetPasswordEdge>>() => T;
-  aggregate: <T = AggregateResetPasswordPromise>() => T;
-}
-
-export interface ResetPasswordConnectionSubscription
-  extends Promise<AsyncIterator<ResetPasswordConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ResetPasswordEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateResetPasswordSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -807,6 +1647,22 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
+export interface AggregateResetPassword {
+  count: Int;
+}
+
+export interface AggregateResetPasswordPromise
+  extends Promise<AggregateResetPassword>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateResetPasswordSubscription
+  extends Promise<AsyncIterator<AggregateResetPassword>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface UserConnection {
   pageInfo: PageInfo;
   edges: UserEdge[];
@@ -828,22 +1684,28 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface AggregateUser {
+  count: Int;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
 }
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
+export type Long = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -855,17 +1717,10 @@ DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
 
-export type Long = string;
-
 /*
-The `Boolean` scalar type represents `true` or `false`.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
-export type Boolean = boolean;
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
+export type Int = number;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -874,9 +1729,9 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Int = number;
+export type String = string;
 
 /**
  * Model Metadata
@@ -884,7 +1739,15 @@ export type Int = number;
 
 export const models: Model[] = [
   {
+    name: "UserStatus",
+    embedded: false
+  },
+  {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Petition",
     embedded: false
   },
   {

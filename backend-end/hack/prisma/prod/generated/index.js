@@ -5,7 +5,15 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
+    name: "UserStatus",
+    embedded: false
+  },
+  {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Petition",
     embedded: false
   },
   {
@@ -16,6 +24,6 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `http://localhost:4466`
+  endpoint: `https://us1.prisma.sh/allancontesini/hackathon-prisma/dev`
 });
 exports.prisma = new exports.Prisma();

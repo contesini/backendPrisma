@@ -13,13 +13,13 @@ chai.should();
 
 const users = [
     {
-        "name": "anacleto", "email": "anacleto@yahoo.com", "password": "anacleto1985@phoda"
+        "name": "anacleto", "surname": "cabrito", "email": "anacleto@yahoo.com", "password": "anacleto1985@phoda"
     },
     {
-        "name": "cleison", "email": "cleison@yahoo.com", "password": "cleisonhonda125"
+        "name": "cleison", "surname": "alves", "email": "cleison@yahoo.com", "password": "cleisonhonda125"
     },
     {
-        "name": "adalberto", "email": "adalberto@bol.com", "password": "surf040@"
+        "name": "adalberto", "surname": "brito", "email": "adalberto@bol.com", "password": "surf040@"
     },
 ]
 
