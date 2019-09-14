@@ -1,0 +1,17 @@
+
+type User {
+    id: ID! @id @unique
+    name: String!
+    email: String! @unique
+    password: String!
+    phone: String
+    resetsPassword: [ResetPassword!]! @relation(name: "UserRequestResetPassword")  @scalarList(strategy: RELATION)
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+}   
+
+type ResetPassword {
+  id: ID! @id @unique
+  user: User! @relation(name: "UserRequestResetPassword")
+  isExpired: Boolean!   
+}
