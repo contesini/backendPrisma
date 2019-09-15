@@ -1,8 +1,11 @@
-const { prisma } = require(`../../hack/prisma/${process.env.ENV || 'test'}/generated/index`);
+const { prisma } = require(`../../hack/prisma/prod/generated/index`);
 import jwt from 'jsonwebtoken';
 
 const freeWay = (query = '') => {
-    const free = ['authenticate', 'IntrospectionQuery', 'getUserByToken', 'createUser', 'changePassword', 'requestResetPassword']
+    const free = [
+        'authenticate', 'IntrospectionQuery', 'getUserByToken',
+        'createUser', 'changePassword', 'requestResetPassword',
+        '__schema']
     for (let index = 0; index < free.length; index++) {
         const isFree = query.includes(free[index])
         if (isFree) return isFree

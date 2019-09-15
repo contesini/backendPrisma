@@ -1,6 +1,6 @@
-const bussinessName = "Mr Higgs";
-const address = "Rua Lauro Linhares 1921, Trindade, Florianopolis";
-const site = "www.mrhiggs.com.br";
+const bussinessName = "Justica Guiada";
+const address = "Sede Judiciária e Protocolo: - Av. Rio Branco, 919 - Centro, Florianópolis - SC, 88015-205";
+const site = "https://trt12.jus.br";
 
 const emailResetPassword = (content) => {
   return `
@@ -118,7 +118,7 @@ const emailResetPassword = (content) => {
                         <tr>
                             <td class="container-padding header" align="left"
                                 style="font-family:Helvetica, Arial, sans-serif;font-size:24px;font-weight:bold;padding-bottom:12px;color:#DF4726;padding-left:24px;padding-right:24px">
-                               Reset Password
+                               Trocar senha
                             </td>
                         </tr>
                         <tr>
@@ -128,7 +128,7 @@ const emailResetPassword = (content) => {
     
                                 <div class="title"
                                     style="font-family:Helvetica, Arial, sans-serif;font-size:18px;font-weight:600;color:#374550">
-                                    You asked to change your password, access the link below to change</div>
+                                    Caso você tenha solicitado a troca de senha do seu perfil acesse o link abaixo</div>
                                 <br>
     
                                 <div class="body-text"

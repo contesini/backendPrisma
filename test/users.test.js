@@ -35,6 +35,7 @@ describe("User", () => {
                 .post(uri)
                 .send(body)
                 .end(async (err, res) => {
+                    console.log(JSON.stringify(res.body))
                     res.body.data.createUser.should.be.an('object')
                     res.body.data.createUser.name.should.be.a('string')
                     res.body.data.createUser.name.should.be.equal(user.name)
